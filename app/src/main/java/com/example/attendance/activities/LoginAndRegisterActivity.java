@@ -1,4 +1,4 @@
-package com.example.attendance;
+package com.example.attendance.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.attendance.R;
 
 public class LoginAndRegisterActivity extends AppCompatActivity {
 EditText email,password,phone,name;
