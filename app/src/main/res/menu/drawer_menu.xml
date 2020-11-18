@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:shownIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+    <item android:id="@+id/checkin"
+            android:title="Check in"
+        ></item>
+        <item android:id="@+id/leave_request"
+            android:title="Leave request"
+            ></item>
+        <item android:id="@+id/checkout"
+            android:title="Check out"
+            ></item>
+        <item android:id="@+id/logout"
+            android:title="Logout"
+            ></item>
+
+
+    </group>
+
+</menu>

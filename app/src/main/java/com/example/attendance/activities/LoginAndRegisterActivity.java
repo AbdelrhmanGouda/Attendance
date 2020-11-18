@@ -2,6 +2,7 @@ package com.example.attendance.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.attendance.MainActivity;
 import com.example.attendance.R;
 
 public class LoginAndRegisterActivity extends AppCompatActivity {
@@ -42,6 +44,14 @@ TextView textRegister,text,textLogin;
                 makeLogin();
             }
         });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(LoginAndRegisterActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void makeLogin() {
@@ -54,7 +64,6 @@ TextView textRegister,text,textLogin;
         department.setVisibility(View.GONE);
         signup.setVisibility(View.GONE);
         textLogin.setVisibility(View.GONE);
-
     }
 
     private void makeRegister() {

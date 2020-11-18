@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="#ABC"
+    android:padding="20dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Name:"
+        android:layout_marginTop="10dp"
+        android:id="@+id/name"
+        ></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:text="Name"
+        android:id="@+id/header_name"
+        android:layout_toRightOf="@id/name"
+        android:layout_marginLeft="10dp"
+        ></TextView>
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="16sp"
+        android:layout_below="@id/name"
+        android:layout_marginTop="30dp"
+    android:text="Department:"
+    android:id="@+id/depart"
+    ></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/name"
+        android:layout_marginTop="30dp"
+        android:text="Name"
+        android:id="@+id/header_department"
+        android:layout_toRightOf="@id/name"
+        android:layout_marginLeft="50dp"
+        ></TextView>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_launcher_background"
+        android:id="@+id/header_image"></ImageView>
+
+
+
+</RelativeLayout>
