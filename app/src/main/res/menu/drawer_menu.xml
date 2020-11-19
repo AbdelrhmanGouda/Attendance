@@ -13,6 +13,9 @@
         <item android:id="@+id/checkout"
             android:title="Check out"
             ></item>
+        <item android:id="@+id/edit_profile"
+            android:title="Edit profile"
+            ></item>
         <item android:id="@+id/logout"
             android:title="Logout"
             ></item>

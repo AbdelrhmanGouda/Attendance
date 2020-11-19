@@ -7,13 +7,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.attendance.activities.LoginAndRegisterActivity;
 import com.example.attendance.fragments.CheckinFragment;
 import com.example.attendance.fragments.CheckoutFragment;
-import com.example.attendance.fragments.LogoutFragment;
+import com.example.attendance.fragments.EditProfileFragment;
 import com.example.attendance.fragments.RequestLeaveFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -59,8 +60,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.checkout :
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new CheckoutFragment()).commit();
                 break;
+            case R.id.edit_profile :
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new EditProfileFragment()).commit();
+
+                break;
             case R.id.logout :
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new LogoutFragment()).commit();
+                Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.leave_request :
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RequestLeaveFragment()).commit();
