@@ -47,7 +47,7 @@ TextView textRegister,text,textLogin;
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginAndRegisterActivity.this, MainActivity.class);
+                Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
                 startActivity(intent);
 
             }
@@ -76,7 +76,13 @@ TextView textRegister,text,textLogin;
         department.setVisibility(View.VISIBLE);
         signup.setVisibility(View.VISIBLE);
         textLogin.setVisibility(View.VISIBLE);
-
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(LoginAndRegisterActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
     }

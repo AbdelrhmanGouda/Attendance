@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="MissingDefaultResource"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/view_available"
+            android:title="View Available"/>
+        <item android:id="@+id/assign_roles"
+            android:title="Assign Roles"/>
+        <item android:id="@+id/signup_requests"
+            android:title="Sign Up Requests "/>
+        <item android:id="@+id/admin_leave_requests"
+            android:title="Leave Requests"/>
+        <item android:id="@+id/employees_list"
+            android:title="Employees List"/>
+        <item android:id="@+id/employees_reports"
+            android:title="Employees Reports"/>
+        <item android:id="@+id/manage_department"
+            android:title="Manage Department"/>
+        <item android:id="@+id/admin_logout"
+            android:title="Logout"/>
+
+    </group>
+</menu>
