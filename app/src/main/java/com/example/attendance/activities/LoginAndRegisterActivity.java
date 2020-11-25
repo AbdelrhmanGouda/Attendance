@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.attendance.MainActivity;
 import com.example.attendance.R;
 
 public class LoginAndRegisterActivity extends AppCompatActivity {

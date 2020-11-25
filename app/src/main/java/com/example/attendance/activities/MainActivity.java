@@ -1,4 +1,4 @@
-package com.example.attendance;
+package com.example.attendance.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.attendance.activities.LoginAndRegisterActivity;
+import com.example.attendance.R;
 import com.example.attendance.fragments.CheckinFragment;
 import com.example.attendance.fragments.CheckoutFragment;
 import com.example.attendance.fragments.EditProfileFragment;
