@@ -9,5 +9,7 @@
     <string name="decline">Decline</string>
     <string name="email">E-mail :</string>
     <string name="department">Department :</string>
+    <string name="time">Time :</string>
+    <string name="reason">Reason :</string>
 
 </resources>
