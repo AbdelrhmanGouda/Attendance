@@ -30,18 +30,32 @@ public class ViewAvailable extends Fragment {
         availableRecyclerView =view.findViewById(R.id.view_available_recycler);
         LinearLayoutManager linerLayoutManager = new LinearLayoutManager(getContext());
         availableRecyclerView.setLayoutManager(linerLayoutManager);
-
-        availableRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         availableEmployeeDataArrayList =new ArrayList<AvailableEmployeeData>();
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Mohamed Nasr"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Abdelrhman Gouda"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Khaled Nabil"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Mohamed Nasr"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Abdelrhman Gouda"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Khaled Nabil"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Mohamed Nasr"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Abdelrhman Gouda"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Khaled Nabil"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Mohamed Nasr"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Abdelrhman Gouda"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Khaled Nabil"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Mohamed Nasr"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Abdelrhman Gouda"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Khaled Nabil"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Mohamed Nasr"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Abdelrhman Gouda"));
+        availableEmployeeDataArrayList.add(new AvailableEmployeeData("Khaled Nabil"));
         availableEmployeeDataArrayList.add(new AvailableEmployeeData("Mohamed Nasr"));
         availableEmployeeDataArrayList.add(new AvailableEmployeeData("Abdelrhman Gouda"));
         availableEmployeeDataArrayList.add(new AvailableEmployeeData("Khaled Nabil"));
         availableAdapter =new AvailableAdapter(availableEmployeeDataArrayList,getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),linerLayoutManager.getOrientation());
         availableRecyclerView.addItemDecoration(dividerItemDecoration);
-
         availableRecyclerView.setAdapter(availableAdapter);
-        availableRecyclerView.setItemAnimator(new DefaultItemAnimator());
         return view;
 
     }
