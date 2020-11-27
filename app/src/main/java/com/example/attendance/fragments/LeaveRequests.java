@@ -33,8 +33,8 @@ public class LeaveRequests extends Fragment {
         LinearLayoutManager linerLayoutManager = new LinearLayoutManager(getContext());
         leaveRecyclerView.setLayoutManager(linerLayoutManager);
         leaveRequestsData= new ArrayList<LeaveRequestsData>();
-        leaveRequestsData.add(new LeaveRequestsData("Abdelrhman Gouda","SE","8:01","sdkfjhfdsghdxnzbdksguhasdfgdsjkxvvdzxvndjbdsbvbdajkkdjalsbvjlkdsdvjsklasbdk;bdva;bjkdkdsvldbjkvvdsbajbkdsbjvdsa;bavcx nvjdhvcnk"));
-        leaveRequestsData.add(new LeaveRequestsData("Khaled Nabil","IS","1:30","sdkfjhfdsghdxnzbdksguhasdfgdsjkxvvdzxvndjbdsbvbdajkkdjalsbvjlkdsdvjsklasbdk;bdva;bjkdkdsvldbjkvvdsbajbkdsbjvdsa;bavcx nvjdhvcnk"));
+        leaveRequestsData.add(new LeaveRequestsData("Abdelrhman Gouda","SE","8:01","Because Ana 3L2"));
+        leaveRequestsData.add(new LeaveRequestsData("Khaled Nabil","IS","1:30","adddddddddddddddddddddddddddddddddddddddddddddddddddddd"));
         leaveRequestsData.add(new LeaveRequestsData("Mohamed Nasr","SE","10:20","sdkfjhfdsghdxnzbdksguhasdfgdsjkxvvdzxvndjbdsbvbdajkkdjalsbvjlkdsdvjsklasbdk;bdva;bjkdkdsvldbjkvvdsbajbkdsbjvdsa;bavcx nvjdhvcnk"));
         leaveRequestsAdapter= new LeaveRequestsAdapter(leaveRequestsData,getContext());
         leaveRecyclerView.setAdapter(leaveRequestsAdapter);

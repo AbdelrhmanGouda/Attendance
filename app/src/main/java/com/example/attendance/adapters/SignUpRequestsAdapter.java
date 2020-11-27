@@ -37,13 +37,13 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
         holder.empName.setText(signUpRequestsData.get(position).getEmpName());
         holder.empEmail.setText(signUpRequestsData.get(position).getEmpEmail());
         holder.empDept.setText(signUpRequestsData.get(position).getEmpDept());
-        final boolean isExpanded = signUpRequestsData.get(position).isExpended();
-        holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        final boolean isExpended = signUpRequestsData.get(position).isExpended();
+        holder.expandableLayout.setVisibility(isExpended ? View.VISIBLE : View.GONE);
 
         holder.expandableLayoutClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signUpRequestsData.get(position).setExpended(!isExpanded);
+                signUpRequestsData.get(position).setExpended(!isExpended);
                 notifyDataSetChanged();
 
             }
