@@ -54,24 +54,27 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="35dp"
         android:layout_below="@id/edit_phone"
+        android:orientation="horizontal"
         android:id="@+id/radio_group"
-        android:visibility="gone"
         >
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radio_admin"
             android:text="Admin"
+            android:visibility="gone"
             android:layout_marginLeft="60dp"
 
             ></RadioButton>
         <RadioButton
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radio_employee"
             android:text="Employee"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="60dp"
 
             ></RadioButton>
 
@@ -79,9 +82,10 @@
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_phone"
+        android:layout_below="@id/radio_group"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
+        android:layout_marginBottom="30dp"
         android:id="@+id/spinner_depart"
         android:visibility="gone"
         ></Spinner>

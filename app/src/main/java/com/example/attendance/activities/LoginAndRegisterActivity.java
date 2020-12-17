@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.attendance.R;
 import com.example.attendance.model.UserData;
@@ -21,8 +25,12 @@ EditText email,password,phone,name;
 Spinner department;
 Button login,signup;
 RadioButton admin,employee;
+RadioGroup radioGroup;
 TextView textRegister,text,textLogin;
     FirebaseAuth auth;
+    String textType=null;
+    String textDepartment=null;
+
     DatabaseReference reference;
     UserData userData;
 
@@ -40,6 +48,7 @@ TextView textRegister,text,textLogin;
         text=findViewById(R.id.text1);
         textLogin=findViewById(R.id.text_login);
         admin=findViewById(R.id.radio_admin);
+        radioGroup=findViewById(R.id.radio_group);
         employee=findViewById(R.id.radio_employee);
         textRegister=findViewById(R.id.text_signup);
         auth=FirebaseAuth.getInstance();
@@ -68,9 +77,46 @@ TextView textRegister,text,textLogin;
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String textName=name.getText().toString();
+                String textEmail=email.getText().toString();
+                String textPassword=password.getText().toString();
+                String textPhone=phone.getText().toString();
+                String image=null;
+               /* department.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        textDepartment=parent.getItemAtPosition(position).toString();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                */
+                userData=new UserData(textName,textEmail,textPassword,image,textType,textDepartment,textPhone);
+
+                if(admin.isChecked()){
+                    textType=admin.getText().toString();
+                }else if (employee.isChecked()){
+                    textType=employee.getText().toString();
+                }
                 register();
             }
         });
+           employee.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+               @Override
+               public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                   if(isChecked){
+                       department.setVisibility(View.VISIBLE);
+
+                   }else {
+                       department.setVisibility(View.GONE);
+
+                   }
+               }
+           });
+
     }
 
 
@@ -96,9 +142,13 @@ TextView textRegister,text,textLogin;
 
         name.setVisibility(View.VISIBLE);
         phone.setVisibility(View.VISIBLE);
-        department.setVisibility(View.VISIBLE);
+
+
         signup.setVisibility(View.VISIBLE);
         textLogin.setVisibility(View.VISIBLE);
+        admin.setVisibility(View.VISIBLE);
+        employee.setVisibility(View.VISIBLE);
+
     }
     private void register() {
 
@@ -107,4 +157,18 @@ TextView textRegister,text,textLogin;
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(employee.isChecked()){
+                department.setVisibility(View.VISIBLE);
+                Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+
+        }else if(admin.isChecked()){
+                department.setVisibility(View.GONE);
+                Toast.makeText(this, "no", Toast.LENGTH_SHORT).show();
+
+            };
+
+    }
 }
