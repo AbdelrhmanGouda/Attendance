@@ -51,6 +51,31 @@
         android:layout_below="@id/edit_fullname"
         android:id="@+id/edit_phone"
         ></EditText>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_phone"
+        android:id="@+id/radio_group"
+        android:visibility="gone"
+        >
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_admin"
+            android:text="Admin"
+            android:layout_marginLeft="60dp"
+
+            ></RadioButton>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_employee"
+            android:text="Employee"
+            android:layout_marginLeft="100dp"
+
+            ></RadioButton>
+
+    </RadioGroup>
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

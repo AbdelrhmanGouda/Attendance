@@ -7,16 +7,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.attendance.R;
+import com.example.attendance.model.UserData;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 public class LoginAndRegisterActivity extends AppCompatActivity {
 EditText email,password,phone,name;
 Spinner department;
 Button login,signup;
+RadioButton admin,employee;
 TextView textRegister,text,textLogin;
+    FirebaseAuth auth;
+    DatabaseReference reference;
+    UserData userData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +39,12 @@ TextView textRegister,text,textLogin;
         signup=findViewById(R.id.btn_signup);
         text=findViewById(R.id.text1);
         textLogin=findViewById(R.id.text_login);
+        admin=findViewById(R.id.radio_admin);
+        employee=findViewById(R.id.radio_employee);
         textRegister=findViewById(R.id.text_signup);
+        auth=FirebaseAuth.getInstance();
+
+
         textRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +65,14 @@ TextView textRegister,text,textLogin;
 
             }
         });
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                register();
+            }
+        });
     }
+
 
     private void makeLogin() {
         text.setVisibility(View.VISIBLE);
@@ -63,6 +84,9 @@ TextView textRegister,text,textLogin;
         department.setVisibility(View.GONE);
         signup.setVisibility(View.GONE);
         textLogin.setVisibility(View.GONE);
+        admin.setVisibility(View.GONE);
+        employee.setVisibility(View.GONE);
+
     }
 
     private void makeRegister() {
@@ -75,14 +99,12 @@ TextView textRegister,text,textLogin;
         department.setVisibility(View.VISIBLE);
         signup.setVisibility(View.VISIBLE);
         textLogin.setVisibility(View.VISIBLE);
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(LoginAndRegisterActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+    }
+    private void register() {
 
+        Intent intent=new Intent(LoginAndRegisterActivity.this, MainActivity.class);
+        startActivity(intent);
 
     }
+
 }
