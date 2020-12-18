@@ -17,11 +17,20 @@ import com.example.attendance.fragments.CheckoutFragment;
 import com.example.attendance.fragments.EditProfileFragment;
 import com.example.attendance.fragments.RequestLeaveFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    Boolean currentState =false;
+    FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout=findViewById(R.id.drawer_layout);
         toolbar=findViewById(R.id.toolbar);
         navigationView=findViewById(R.id.nav_view);
+        auth=FirebaseAuth.getInstance();
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(toggle);
@@ -65,8 +75,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.logout :
-                Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
+                currentState=true;
+                disconnect();
+            Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.leave_request :
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RequestLeaveFragment()).commit();
@@ -76,4 +89,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+/*
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(!currentState){
+            disconnect();
+        }
+    }
+
+ */
+
+    private void disconnect() {
+        FirebaseUser firebaseUser=auth.getCurrentUser();
+        String id=firebaseUser.getUid();
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Employee Available").child(id);
+        query6.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null){
+                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            dataSnapshot.getRef().removeValue();
+
+                        }
+
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        
+    }
+
 }

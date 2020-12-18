@@ -2,6 +2,7 @@ package com.example.attendance.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,5 +36,10 @@ public class SignUpRequests extends Fragment {
         signUpRequestsAdapter = new SignUpRequestsAdapter(signUpRequestsData,getContext());
         requestRecyclerView.setAdapter(signUpRequestsAdapter);
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 }

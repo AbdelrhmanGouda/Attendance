@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.attendance.R;
 
+import java.util.Calendar;
+
 public class RequestLeaveFragment extends Fragment  implements TimePickerDialog.OnTimeSetListener {
     Button requestTime,sendRequest;
     EditText reason;
@@ -37,16 +39,16 @@ public class RequestLeaveFragment extends Fragment  implements TimePickerDialog.
                  DialogFragment timepicker= new TimeRequestFragment();
                 timepicker.show(getActivity().getSupportFragmentManager(),"time picker");
 
+
             }
         });
-
+           //onTimeSet();
         return  view;
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-        this.hours.setText("you want to leave after "+hourOfDay);
+        hours.setText("you want to leave after "+hourOfDay);
 
         Toast.makeText(getActivity(),"this is "+hourOfDay,Toast.LENGTH_LONG).show();
     }

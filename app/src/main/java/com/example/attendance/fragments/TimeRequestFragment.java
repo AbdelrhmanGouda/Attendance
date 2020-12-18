@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +18,7 @@ public class TimeRequestFragment extends DialogFragment implements TimePickerDia
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Calendar calendar=Calendar.getInstance();
-        int hour =calendar.get(Calendar.HOUR_OF_DAY);
+        final int hour =calendar.get(Calendar.HOUR_OF_DAY);
         int munites=calendar.get(Calendar.MINUTE);
         return new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override

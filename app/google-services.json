@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "518587259957",
     "project_id": "attendance-d72b1",
+    "firebase_url": "https://attendance-d72b1-default-rtdb.firebaseio.com/",
     "storage_bucket": "attendance-d72b1.appspot.com"
   },
   "client": [
