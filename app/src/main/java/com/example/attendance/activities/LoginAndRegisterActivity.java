@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment;
 
 import android.app.FragmentManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -33,8 +36,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginAndRegisterActivity extends AppCompatActivity {
 EditText email,password,phone,name;
@@ -49,6 +56,9 @@ TextView textRegister,text,textLogin;
     FirebaseDatabase database;
     DatabaseReference reference;
     UserData userData;
+    FirebaseUser firebaseUser;
+    String CHANNAL_ID = "channal";
+
 
 
     @Override
@@ -69,6 +79,12 @@ TextView textRegister,text,textLogin;
         employee=findViewById(R.id.radio_employee);
         textRegister=findViewById(R.id.text_signup);
         auth=FirebaseAuth.getInstance();
+
+        firebaseUser=auth.getCurrentUser();
+        if(firebaseUser!=null){
+            String id=firebaseUser.getUid();
+            keepLogin(id);
+        }
 
         employee.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -137,28 +153,88 @@ TextView textRegister,text,textLogin;
                         ||TextUtils.isEmpty(textPhone)||TextUtils.isEmpty(textType)){
                     Toast.makeText(LoginAndRegisterActivity.this, "Enter all fields", Toast.LENGTH_SHORT).show();
                 }else {
-                  /*  String message = textName+" want to join our system ";
-                    NotificationCompat.Builder builder=new NotificationCompat.Builder(
-                            LoginAndRegisterActivity.this
-                    )
-                     .setSmallIcon(R.drawable.notification_background)
-                      .setContentTitle("Register notification")
-                        .setContentText(message)
-                          .setAutoCancel(true);
 
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new SignUpRequests()).commit();
-                    PendingIntent pendingIntent=PendingIntent.getActivity(LoginAndRegisterActivity.this,
-                            0, ,PendingIntent.FLAG_UPDATE_CURRENT);
-                    NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                   */
-                    register(textName,textPassword,textEmail,textPhone,textType,textType,textDepartment,image);
+                  signupNotification(textName);
+                   registerRequest(textName,textPassword,textEmail,textPhone,textType,textType,textDepartment,image);
                 }
             }
         });
 
     }
 
+    private void keepLogin( String id) {
+
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
+        query6.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null){
+                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                            userData=new UserData();
+                            String data=dataSnapshot.child("type").getValue(String.class);
+                            if(data.equals("Admin")){
+
+                                Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        }
+
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void signupNotification(String textName) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+            String name = "mychannal";
+            String description = "this is decsreption";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+
+            NotificationChannel channel =new NotificationChannel(CHANNAL_ID ,name,importance);
+            channel.setDescription(description);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        String message = textName+" want to join our system ";
+                    NotificationCompat.Builder builder=new NotificationCompat.Builder(
+                            LoginAndRegisterActivity.this,CHANNAL_ID
+                    )
+                     .setSmallIcon(R.drawable.notification_background)
+                      .setContentTitle("Register notification")
+                        .setContentText(message)
+                          .setAutoCancel(true);
+                    Intent intent =new Intent(LoginAndRegisterActivity.this,MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("name","mohamed");
+                    PendingIntent pendingIntent=PendingIntent.getActivity(LoginAndRegisterActivity.this,
+                            0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentIntent(pendingIntent);
+                    NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(0,builder.build());
+
+                    //if(type==(admin || head) to see this noti only)
+
+
+    }
 
 
     private void makeLogin() {
@@ -237,6 +313,21 @@ TextView textRegister,text,textLogin;
 
 
     }
-
+    private void registerRequest(final String textName, final String textPassword, final String textEmail, final String textPhone, final String textType,
+                          final String type, final String textDepartment, final String image) {
+        userData=new UserData(textName,textEmail,textPassword,image,type,textDepartment,textPhone);
+      //  FirebaseUser firebaseUser=auth.getCurrentUser();
+        //String id=firebaseUser.getUid();
+        database=FirebaseDatabase.getInstance();
+        reference=database.getReference("Register Request").push();
+        reference.setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+               /*` Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
+                startActivity(intent);
+                finish();*/
+            }
+        });
+    }
 
 }

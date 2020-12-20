@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.attendance.R;
 import com.example.attendance.fragments.CheckinFragment;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Boolean currentState =false;
     FirebaseAuth auth;
+    FirebaseUser firebaseUser;
+    String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar=findViewById(R.id.toolbar);
         navigationView=findViewById(R.id.nav_view);
         auth=FirebaseAuth.getInstance();
+
+        firebaseUser=auth.getCurrentUser();
+        name=getIntent().getStringExtra("name");
+
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(toggle);
@@ -46,7 +53,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
 
        if(savedInstanceState==null){
-           getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new CheckinFragment()).commit();
+           if(name!=null){
+               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new CheckoutFragment()).commit();
+               Toast.makeText(this, "tam", Toast.LENGTH_SHORT).show();
+
+           }else{
+               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new CheckinFragment()).commit();
+               Toast.makeText(this, "mfe4", Toast.LENGTH_SHORT).show();
+
+           }
            navigationView.setCheckedItem(R.id.checkin);
 
        }
