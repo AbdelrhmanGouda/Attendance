@@ -78,7 +78,7 @@ TextView textRegister,text,textLogin;
     Button btnImage;
     ArrayList<String> getDepartments;
     Uri fileUri,uri1;
-    String id;
+    String id,uId;
     String data;
     String CHANNAL_ID = "channal";
 
@@ -424,15 +424,20 @@ TextView textRegister,text,textLogin;
 
     }
     private void login(final String email, String password) {
-        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
-        final String uId=firebaseUser.getUid();
+        FirebaseUser firebaseUser=auth.getCurrentUser();
+
+        if(firebaseUser!=null){
+            uId=firebaseUser.getUid();
+        }
 
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(uId);
+                    FirebaseAuth  firebaseAuth=FirebaseAuth.getInstance();
+                    FirebaseUser user=auth.getCurrentUser();
+                    final String n=user.getUid();
+                    Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(n);
                     query6.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -446,7 +451,7 @@ TextView textRegister,text,textLogin;
 
                                     }
                                     Log.i("Employee",data);
-                                    Log.i("Employee1",uId);
+                                    Log.i("Employee1",n);
 
                                     if(data.equals("Employee")){
 

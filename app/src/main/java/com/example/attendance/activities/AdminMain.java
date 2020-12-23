@@ -90,6 +90,7 @@ public class AdminMain extends AppCompatActivity implements NavigationView.OnNav
                 Intent intent=new Intent(AdminMain.this, LoginAndRegisterActivity.class);
                 startActivity(intent);
                 auth.signOut();
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
