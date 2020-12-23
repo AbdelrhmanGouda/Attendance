@@ -1,14 +1,18 @@
 package com.example.attendance.data;
 
 public class LeaveRequestsData {
-    private String leaveEmpName,leaveEmpDept,leaveEmpTime,leaveEmpReason;
+    private String name, department, timeHours, reason ,timeMinutes;
     private boolean expended;
-    public LeaveRequestsData(String leaveEmpName, String leaveEmpDept, String leaveEmpTime, String leaveEmpReason) {
-        this.leaveEmpName = leaveEmpName;
-        this.leaveEmpDept = leaveEmpDept;
-        this.leaveEmpTime = leaveEmpTime;
-        this.leaveEmpReason = leaveEmpReason;
+    public LeaveRequestsData(String name, String department, String timeHours, String reason ,String timeMinutes) {
+        this.name = name;
+        this.department = department;
+        this.timeHours = timeHours;
+        this.reason = reason;
+        this.timeMinutes=timeMinutes;
         this.expended =false;
+    }
+
+    public LeaveRequestsData() {
     }
 
     public boolean isExpended() {
@@ -19,35 +23,43 @@ public class LeaveRequestsData {
         this.expended = expended;
     }
 
-    public String getLeaveEmpName() {
-        return leaveEmpName;
+    public String getName() {
+        return name;
     }
 
-    public void setLeaveEmpName(String leaveEmpName) {
-        this.leaveEmpName = leaveEmpName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLeaveEmpDept() {
-        return leaveEmpDept;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setLeaveEmpDept(String leaveEmpDept) {
-        this.leaveEmpDept = leaveEmpDept;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
-    public String getLeaveEmpTime() {
-        return leaveEmpTime;
+    public String getTimeHours() {
+        return timeHours;
     }
 
-    public void setLeaveEmpTime(String leaveEmpTime) {
-        this.leaveEmpTime = leaveEmpTime;
+    public void setTimeHours(String timeHours) {
+        this.timeHours = timeHours;
     }
 
-    public String getLeaveEmpReason() {
-        return leaveEmpReason;
+    public String getReason() {
+        return reason;
     }
 
-    public void setLeaveEmpReason(String leaveEmpReason) {
-        this.leaveEmpReason = leaveEmpReason;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getTimeMinutes() {
+        return timeMinutes;
+    }
+
+    public void setTimeMinutes(String timeMinutes) {
+        this.timeMinutes = timeMinutes;
     }
 }

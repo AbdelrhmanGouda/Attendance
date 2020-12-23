@@ -13,5 +13,6 @@
     <string name="reason">Reason :</string>
     <string name="hourofabsence">Hour Of Absence :</string>
     <string name="month">Month :</string>
+    <string name="update_role">Update Role</string>
 
 </resources>

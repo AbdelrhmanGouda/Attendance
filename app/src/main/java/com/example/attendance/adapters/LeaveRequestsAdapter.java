@@ -14,9 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendance.R;
 import com.example.attendance.data.LeaveRequestsData;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LeaveRequestsAdapter extends RecyclerView.Adapter<LeaveRequestsAdapter.LeaveRequestsViewHolder> {
@@ -35,10 +38,10 @@ public class LeaveRequestsAdapter extends RecyclerView.Adapter<LeaveRequestsAdap
 
     @Override
     public void onBindViewHolder(@NonNull LeaveRequestsViewHolder holder, final int position) {
-        holder.empName.setText(leaveRequestsDataList.get(position).getLeaveEmpName());
-        holder.empDept.setText(leaveRequestsDataList.get(position).getLeaveEmpDept());
-        holder.leaveTime.setText(leaveRequestsDataList.get(position).getLeaveEmpTime());
-        holder.empReason.setText(leaveRequestsDataList.get(position).getLeaveEmpReason());
+        holder.empName.setText(leaveRequestsDataList.get(position).getName());
+        holder.empDept.setText(leaveRequestsDataList.get(position).getDepartment());
+        holder.leaveTime.setText(leaveRequestsDataList.get(position).getTimeHours()+":"+leaveRequestsDataList.get(position).getTimeMinutes());
+        holder.empReason.setText(leaveRequestsDataList.get(position).getReason());
         final boolean isExpanded = leaveRequestsDataList.get(position).isExpended();
         holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
@@ -54,12 +57,23 @@ public class LeaveRequestsAdapter extends RecyclerView.Adapter<LeaveRequestsAdap
         holder.leaveAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FirebaseDatabase.getInstance().getReference("Leave Request").orderByChild("name")
+                        .equalTo(leaveRequestsDataList.get(position).getName()).addListenerForSingleValueEvent(valueEventListener);
+                leaveRequestsDataList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeRemoved(position, getItemCount());
                 Toast.makeText(context, "accepted", Toast.LENGTH_SHORT).show();
+
             }
         });
         holder.leaveDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FirebaseDatabase.getInstance().getReference("Register Request").orderByChild("email")
+                        .equalTo(leaveRequestsDataList.get(position).getName()).addListenerForSingleValueEvent(valueEventListener);
+                leaveRequestsDataList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeRemoved(position, getItemCount());
                 Toast.makeText(context, "declined", Toast.LENGTH_SHORT).show();
             }
         });
@@ -87,4 +101,18 @@ public class LeaveRequestsAdapter extends RecyclerView.Adapter<LeaveRequestsAdap
             expandableLayoutClick=itemView.findViewById(R.id.leave_expendable_click);
         }
     }
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            for (DataSnapshot child: dataSnapshot.getChildren()) {
+                child.getRef().setValue(null);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 }
+
