@@ -82,7 +82,7 @@ public class CheckinFragment extends Fragment {
         FirebaseUser firebaseUser=auth.getCurrentUser();
         final String id=firebaseUser.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users");
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -91,7 +91,7 @@ public class CheckinFragment extends Fragment {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             userData=new UserData();
-                            data=dataSnapshot.child("name").getValue(String.class);
+                            data=snapshot.child("name").getValue(String.class);
                             Bundle bundle=new Bundle();
                             CheckoutFragment checkoutFragment=new CheckoutFragment();
                             Calendar calendar=Calendar.getInstance();
@@ -146,7 +146,7 @@ public class CheckinFragment extends Fragment {
         FirebaseUser firebaseUser=auth.getCurrentUser();
         final String id=firebaseUser.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users");
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -155,7 +155,7 @@ public class CheckinFragment extends Fragment {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             userData=new UserData();
-                            data=dataSnapshot.child("name").getValue(String.class);
+                            data=snapshot.child("name").getValue(String.class);
                             DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Employee Available");
                             reference.child(id).child("Name").setValue(data);
 

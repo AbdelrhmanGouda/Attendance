@@ -106,14 +106,14 @@ public class RequestLeaveFragment extends Fragment {
         FirebaseUser firebaseUser=auth.getCurrentUser();
         final String id=firebaseUser.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users");
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot!=null){
                     if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            name=dataSnapshot.child("name").getValue(String.class);
+                            name=snapshot.child("name").getValue(String.class);
                         }
                         if(minute!=0&&hourOfDay!=0&&
                                 String.valueOf(currentMonth)!=null&&reason.getText().toString().length()>0){
@@ -121,7 +121,7 @@ public class RequestLeaveFragment extends Fragment {
                                     String.valueOf(minute),String.valueOf(currentMonth),reason.getText().toString());
 
                             DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Leave Request");
-                            reference.child(currentMonth+" "+currentyear).child(id).push().setValue(leaveRequestModel);
+                            reference.child(id).setValue(leaveRequestModel);
 
                         }else {
                             Toast.makeText(getContext(), "Enter all fields", Toast.LENGTH_SHORT).show();

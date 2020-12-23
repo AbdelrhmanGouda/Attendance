@@ -1,6 +1,7 @@
 package com.example.attendance.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompatExtras;
@@ -11,13 +12,19 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -32,6 +39,8 @@ import com.example.attendance.fragments.CheckinFragment;
 import com.example.attendance.fragments.SignUpRequests;
 import com.example.attendance.model.UserData;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +51,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.UUID;
 
 public class LoginAndRegisterActivity extends AppCompatActivity {
 EditText email,password,phone,name;
@@ -56,7 +73,11 @@ TextView textRegister,text,textLogin;
     FirebaseDatabase database;
     DatabaseReference reference;
     UserData userData;
+    StorageReference sRefrence;
     FirebaseUser firebaseUser;
+    Button btnImage;
+    ArrayList<String> getDepartments;
+    Uri fileUri,uri1;
     String CHANNAL_ID = "channal";
 
 
@@ -79,6 +100,9 @@ TextView textRegister,text,textLogin;
         employee=findViewById(R.id.radio_employee);
         textRegister=findViewById(R.id.text_signup);
         auth=FirebaseAuth.getInstance();
+        sRefrence= FirebaseStorage.getInstance().getReference();
+        btnImage=findViewById(R.id.btn_image);
+        getDepartments=new ArrayList<>();
 
         firebaseUser=auth.getCurrentUser();
         if(firebaseUser!=null){
@@ -98,8 +122,9 @@ TextView textRegister,text,textLogin;
                 }
             }
         });
+        getDepartments();
 
-               /* department.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                department.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         textDepartment=parent.getItemAtPosition(position).toString();
@@ -110,7 +135,7 @@ TextView textRegister,text,textLogin;
 
                     }
                 });
-                */
+
 
         textRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +154,12 @@ TextView textRegister,text,textLogin;
             public void onClick(View v) {
                 String textEmail=email.getText().toString();
                 String textPassword=password.getText().toString();
-                login(textEmail,textPassword);
+                if(TextUtils.isEmpty(textPassword)||TextUtils.isEmpty(textEmail)){
+                    Toast.makeText(LoginAndRegisterActivity.this, "Enter all fields", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    login(textEmail, textPassword);
+                }
 
             }
         });
@@ -159,12 +189,120 @@ TextView textRegister,text,textLogin;
                 }
             }
         });
+        btnImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadImage();
+            }
+        });
 
+    }
+
+    private void uploadImage() {
+        Intent intent=new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        this.startActivityForResult(intent.createChooser(intent,"Select Image "),2);
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2&&resultCode==RESULT_OK&&data!=null&&data.getData()!=null) {
+            fileUri = data.getData();
+            Log.d("FileUri", fileUri.toString());
+                getData();
+        }
+    }
+    private void getDepartments(){
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Departments");
+        query6.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getDepartments.clear();
+                if(dataSnapshot!=null){
+                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                            String department=snapshot.child("department").getValue(String.class);
+                            getDepartments.add(department);
+                        }
+                        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(LoginAndRegisterActivity.this,android.R.layout.simple_spinner_item,getDepartments){
+                            @NonNull
+                            @Override
+                            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                                View view= LayoutInflater.from(getContext()).inflate(R.layout.custom_row, parent, false);
+                                TextView textView=view.findViewById(R.id.text);
+                                textView.setText(getDepartments.get(position));
+                                textView.setTextColor(getResources().getColor(R.color.colorAccent));
+                                textView.setTextSize(20);
+
+                                return view;
+                            }
+                        };
+                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                        department.setAdapter(arrayAdapter);
+                        arrayAdapter.notifyDataSetChanged();
+
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void getData(){
+
+        if(fileUri!=null){
+            final ProgressDialog progressDialog=new ProgressDialog(LoginAndRegisterActivity.this);
+            progressDialog.setTitle("Uploading ...!");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
+            StorageReference storageReference = sRefrence.child("UserImages/"+ UUID.randomUUID().toString());
+            storageReference.putFile(fileUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> uri=taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uri.isComplete());
+                            uri1=uri.getResult();
+                        //databaserefrence70
+                            progressDialog.dismiss();
+                            Toast.makeText(LoginAndRegisterActivity.this,"upload done",Toast.LENGTH_LONG).show();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(LoginAndRegisterActivity.this,"error, "+e.getMessage(),Toast.LENGTH_LONG).show();
+
+                }
+            })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double prog=(100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Upload "+(int)prog+"%");
+                        }
+                    });
+        }else{
+            Toast.makeText(LoginAndRegisterActivity.this,"upload error",Toast.LENGTH_LONG).show();
+
+        }
     }
 
     private void keepLogin( String id) {
 
-        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users");
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -173,7 +311,7 @@ TextView textRegister,text,textLogin;
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             userData=new UserData();
-                            String data=dataSnapshot.child("type").getValue(String.class);
+                            String data=snapshot.child("type").getValue(String.class);
                             if(data.equals("Admin")){
 
                                 Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
@@ -246,6 +384,7 @@ TextView textRegister,text,textLogin;
         phone.setVisibility(View.GONE);
         department.setVisibility(View.GONE);
         signup.setVisibility(View.GONE);
+        btnImage.setVisibility(View.GONE);
         textLogin.setVisibility(View.GONE);
         admin.setVisibility(View.GONE);
         employee.setVisibility(View.GONE);
@@ -260,7 +399,7 @@ TextView textRegister,text,textLogin;
         name.setVisibility(View.VISIBLE);
         phone.setVisibility(View.VISIBLE);
 
-
+        btnImage.setVisibility(View.VISIBLE);
         signup.setVisibility(View.VISIBLE);
         textLogin.setVisibility(View.VISIBLE);
         admin.setVisibility(View.VISIBLE);
@@ -291,7 +430,7 @@ TextView textRegister,text,textLogin;
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    userData=new UserData(textName,textEmail,textPassword,image,type,textDepartment,textPhone);
+                    userData=new UserData(textName,textEmail,textPassword,uri1.toString(),type,textDepartment,textPhone);
                     FirebaseUser firebaseUser=auth.getCurrentUser();
                     String id=firebaseUser.getUid();
                     database=FirebaseDatabase.getInstance();
@@ -315,7 +454,7 @@ TextView textRegister,text,textLogin;
     }
     private void registerRequest(final String textName, final String textPassword, final String textEmail, final String textPhone, final String textType,
                           final String type, final String textDepartment, final String image) {
-        userData=new UserData(textName,textEmail,textPassword,image,type,textDepartment,textPhone);
+        userData=new UserData(textName,textEmail,textPassword, uri1.toString(),type,textDepartment,textPhone);
       //  FirebaseUser firebaseUser=auth.getCurrentUser();
         //String id=firebaseUser.getUid();
         database=FirebaseDatabase.getInstance();

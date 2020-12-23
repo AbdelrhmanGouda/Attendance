@@ -5,7 +5,9 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,9 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.attendance.R;
-import com.example.attendance.activities.MainActivity;
 import com.example.attendance.model.ReportModel;
-import com.example.attendance.model.UserData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,14 +27,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class CheckoutFragment extends Fragment {
     FirebaseAuth auth;
     Button checkout;
     int startHour,startMinutes;
     String name;
-    String time;
+    String timeHours,timeMinutes;
     CharSequence currentMonth,currentYear;
     @Nullable
     @Override
@@ -81,15 +80,15 @@ public class CheckoutFragment extends Fragment {
         calenda1.set(Calendar.HOUR_OF_DAY,StartHour);
         calenda1.set(Calendar.MINUTE,Startminute);
 
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("hh");
-       /* String time1=simpleDateFormat.format(calendar.getTime());
-        String time2=simpleDateFormat.format(calenda1.getTime());
-        int total=Integer.parseInt(time1)-Integer.parseInt(time2);*/
-              time=simpleDateFormat.format(getCalender(calendar,calenda1).getTime());
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH");
+        timeHours =simpleDateFormat.format(getCalender(calendar,calenda1).getTime());
+
+        SimpleDateFormat simpleDateFormat1=new SimpleDateFormat("mm");
+        timeMinutes =simpleDateFormat1.format(getCalender(calendar,calenda1).getTime());
 
 
 
-        Toast.makeText(getActivity(),time+ "\n"+ getCalender(calendar,calenda1).getTime(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), timeHours + "\n"+ getCalender(calendar,calenda1).getTime()+"\n"+timeMinutes, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -147,8 +146,13 @@ public class CheckoutFragment extends Fragment {
 
                             name=dataSnapshot.child("name").getValue(String.class);
 
-                            int totalTime=0;
-                            totalTime=+Integer.parseInt(time);
+
+
+                            int totalHours=0;
+                            totalHours=+Integer.parseInt(timeHours);
+                            int totalMinutes=0;
+                            totalMinutes=+Integer.parseInt(timeMinutes);
+
                             Calendar calendar=Calendar.getInstance();
                             final int month=calendar.get(Calendar.MONTH);
                             final int year=calendar.get(Calendar.YEAR);
@@ -156,10 +160,49 @@ public class CheckoutFragment extends Fragment {
                             calendar.set(Calendar.YEAR,year);
                             currentMonth= DateFormat.format("MMM",calendar);
                             currentYear= DateFormat.format("yyyy",calendar);
-                            ReportModel  reportModel=new ReportModel(name,totalTime,null,null);
+
+                            ReportModel  reportModel=new ReportModel(name,"se","emp",String.valueOf(currentMonth),totalHours,totalMinutes);
                               DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Reports");
                                    reference.child(String.valueOf(currentMonth+" "+currentYear)).child(id).setValue(reportModel);
-                                    reference.child("months").setValue(currentMonth);
+                            reference.child(String.valueOf(currentMonth+" "+currentYear)).child("month").setValue(currentMonth);
+                         // getToalTime(currentMonth,currentYear,id);
+
+                            }
+
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void getToalTime(final CharSequence month, final CharSequence year, final String getID){
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Reports").child(currentMonth+" "+currentYear).child(getID);
+        query6.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null){
+                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                            int totalHours=snapshot.child("totalHours").getValue(Integer.class);
+                            int totalMinutes=snapshot.child("totalMintues").getValue(Integer.class);
+                          totalHours+=Integer.parseInt(timeHours);
+                          totalMinutes+=Integer.parseInt(timeMinutes);
+                          timeMinutes+=totalMinutes;
+                            ReportModel  reportModel=new ReportModel(name,"se","emp",String.valueOf(month),totalHours,totalMinutes);
+                            DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Reports");
+                            reference.child(String.valueOf(month+" "+year)).child(getID).setValue(reportModel);
+                            reference.child(String.valueOf(month+" "+year)).child("month").setValue(month);
+
+
                         }
 
                     }

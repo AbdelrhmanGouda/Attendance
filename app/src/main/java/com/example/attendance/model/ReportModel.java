@@ -1,17 +1,43 @@
 package com.example.attendance.model;
 
 public class ReportModel {
-    String name,department,type;
-    int totalTime;
+    String name,department,type,month;
+    int totalHours,totalMintues;
 
     public ReportModel() {
     }
 
-    public ReportModel(String name, int totalTime, String department, String type) {
+    public ReportModel(String name, String department, String type, String month, int totalHours, int totalMintues) {
         this.name = name;
-        this.totalTime = totalTime;
         this.department = department;
         this.type = type;
+        this.month = month;
+        this.totalHours = totalHours;
+        this.totalMintues = totalMintues;
+    }
+
+    public int getTotalMintues() {
+        return totalMintues;
+    }
+
+    public void setTotalMintues(int totalMintues) {
+        this.totalMintues = totalMintues;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public int getTotalHours() {
+        return totalHours;
+    }
+
+    public void setTotalHours(int totalHours) {
+        this.totalHours = totalHours;
     }
 
     public String getName() {
@@ -23,11 +49,11 @@ public class ReportModel {
     }
 
     public int getTime() {
-        return totalTime;
+        return totalHours;
     }
 
     public void setTime(int time) {
-        this.totalTime = totalTime;
+        this.totalHours = totalHours;
     }
 
     public String getDepartment() {
