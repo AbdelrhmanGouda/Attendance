@@ -155,7 +155,7 @@ public class CheckinFragment extends Fragment {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             userData=new UserData();
-                            data=snapshot.child("name").getValue(String.class);
+                            data=dataSnapshot.child("name").getValue(String.class);
                             DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Employee Available");
                             reference.child(id).child("Name").setValue(data);
 

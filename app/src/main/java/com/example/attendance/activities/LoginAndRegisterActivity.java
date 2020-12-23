@@ -78,6 +78,8 @@ TextView textRegister,text,textLogin;
     Button btnImage;
     ArrayList<String> getDepartments;
     Uri fileUri,uri1;
+    String id;
+    String data;
     String CHANNAL_ID = "channal";
 
 
@@ -106,8 +108,8 @@ TextView textRegister,text,textLogin;
 
         firebaseUser=auth.getCurrentUser();
         if(firebaseUser!=null){
-            String id=firebaseUser.getUid();
-            keepLogin(id);
+            id=firebaseUser.getUid();
+          //  keepLogin(id);
         }
 
         employee.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -157,8 +159,8 @@ TextView textRegister,text,textLogin;
                 if(TextUtils.isEmpty(textPassword)||TextUtils.isEmpty(textEmail)){
                     Toast.makeText(LoginAndRegisterActivity.this, "Enter all fields", Toast.LENGTH_SHORT).show();
                 }else {
-
                     login(textEmail, textPassword);
+                   // keepLogin(id);
                 }
 
             }
@@ -301,8 +303,11 @@ TextView textRegister,text,textLogin;
     }
 
     private void keepLogin( String id) {
+        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
+        final String uId=firebaseUser.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users");
+        Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(uId);
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -311,21 +316,25 @@ TextView textRegister,text,textLogin;
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             userData=new UserData();
-                            String data=snapshot.child("type").getValue(String.class);
-                            if(data.equals("Employee")){
+                          //  userData=snapshot.getValue(UserData.class);
+                            data=dataSnapshot.child("type").getValue(String.class);
 
-                                Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                            }else if(data.equals("Admin")){
+                        }
+                        Log.i("Employee",data);
+                        Log.i("Employee1",uId);
 
-                                Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                            }
+                        if(data.equals("Employee")){
 
+                            Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }else {
+
+                            Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
                         }
 
                     }
@@ -415,13 +424,58 @@ TextView textRegister,text,textLogin;
 
     }
     private void login(final String email, String password) {
+        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
+        final String uId=firebaseUser.getUid();
+
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
-                    startActivity(intent);
-                    finish();
+                    Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(uId);
+                    query6.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot!=null){
+                                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
+                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                                        userData=new UserData();
+                                        //  userData=snapshot.getValue(UserData.class);
+                                        data=dataSnapshot.child("type").getValue(String.class);
+
+                                    }
+                                    Log.i("Employee",data);
+                                    Log.i("Employee1",uId);
+
+                                    if(data.equals("Employee")){
+
+                                        Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }else {
+
+                                        Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
+                                }
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
                 }else {
                     Toast.makeText(LoginAndRegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }

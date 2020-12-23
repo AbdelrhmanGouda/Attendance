@@ -24,15 +24,18 @@ import com.example.attendance.fragments.RequestLeaveFragment;
 import com.example.attendance.fragments.SignUpRequests;
 import com.example.attendance.fragments.ViewAvailable;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
+    FirebaseAuth auth;
     private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
+        auth= FirebaseAuth.getInstance();
 
         toolbar=findViewById(R.id.admin_toolbar);
         setSupportActionBar(toolbar);
@@ -86,6 +89,7 @@ public class AdminMain extends AppCompatActivity implements NavigationView.OnNav
             case R.id.admin_logout :
                 Intent intent=new Intent(AdminMain.this, LoginAndRegisterActivity.class);
                 startActivity(intent);
+                auth.signOut();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -41,12 +41,7 @@ public class CheckoutFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_checkout,container,false);
         auth=FirebaseAuth.getInstance();
         checkout=view.findViewById(R.id.btn_checkout);
-        checkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                disconnect();
-            }
-        });
+
         if(getArguments()!=null){
             startHour=getArguments().getInt("startHour1");
             startMinutes=getArguments().getInt("StartMinutes1");
@@ -59,6 +54,8 @@ public class CheckoutFragment extends Fragment {
             public void onClick(View v) {
                 calculateHours(startHour,startMinutes);
                 setHoursOfDay();
+                disconnect();
+
             }
         });
 
@@ -144,8 +141,8 @@ public class CheckoutFragment extends Fragment {
                     if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                            name=snapshot.child("name").getValue(String.class);
-                            department=snapshot.child("department").getValue(String.class);
+                            name=dataSnapshot.child("name").getValue(String.class);
+                            department=dataSnapshot.child("department").getValue(String.class);
 
 
 

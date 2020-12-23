@@ -141,10 +141,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.logout :
-                currentState=true;
                 disconnect();
                 auth.signOut();
-            Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
+                Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
                 startActivity(intent);
                 finish();
                 break;
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-        
+
     }
 
     @Override
