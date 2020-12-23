@@ -24,12 +24,12 @@
         ></TextView>
     <EditText
         android:layout_width="250dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
         android:layout_below="@id/text_timepicker"
         android:layout_centerHorizontal="true"
         android:hint="enter your reason "
-        android:gravity="top"
+        android:gravity="center"
         android:id="@+id/edit_leave_request"
         ></EditText>
     <Button

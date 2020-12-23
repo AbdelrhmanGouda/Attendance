@@ -312,9 +312,15 @@ TextView textRegister,text,textLogin;
 
                             userData=new UserData();
                             String data=snapshot.child("type").getValue(String.class);
-                            if(data.equals("Admin")){
+                            if(data.equals("Employee")){
 
                                 Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }else if(data.equals("Admin")){
+
+                                Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();
@@ -338,7 +344,9 @@ TextView textRegister,text,textLogin;
     }
 
     private void signupNotification(String textName) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ){
 
             String name = "mychannal";
             String description = "this is decsreption";
@@ -454,7 +462,7 @@ TextView textRegister,text,textLogin;
     }
     private void registerRequest(final String textName, final String textPassword, final String textEmail, final String textPhone, final String textType,
                           final String type, final String textDepartment, final String image) {
-        userData=new UserData(textName,textEmail,textPassword, uri1.toString(),type,textDepartment,textPhone);
+        userData=new UserData(textName,textEmail,textPassword, uri1.toString(),"Employee",textDepartment,textPhone);
       //  FirebaseUser firebaseUser=auth.getCurrentUser();
         //String id=firebaseUser.getUid();
         database=FirebaseDatabase.getInstance();
@@ -462,9 +470,9 @@ TextView textRegister,text,textLogin;
         reference.setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
+               /* Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
                 startActivity(intent);
-                finish();
+                finish();*/
             }
         });
     }

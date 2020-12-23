@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="13sp"
         android:text="Name:"
         android:layout_marginTop="10dp"
         android:id="@+id/name"
@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="13sp"
         android:layout_marginTop="10dp"
         android:text="Name"
         android:id="@+id/header_name"
@@ -25,7 +25,7 @@
     <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="16sp"
+    android:textSize="13sp"
         android:layout_below="@id/name"
         android:layout_marginTop="30dp"
     android:text="Department:"
@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="13sp"
         android:layout_below="@id/name"
         android:layout_marginTop="30dp"
         android:text="Name"
@@ -42,12 +42,12 @@
         android:layout_toRightOf="@id/name"
         android:layout_marginLeft="50dp"
         ></TextView>
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_launcher_background"
-        android:id="@+id/header_image"></ImageView>
+        android:id="@+id/header_image"></de.hdodenhof.circleimageview.CircleImageView>
 
 
 

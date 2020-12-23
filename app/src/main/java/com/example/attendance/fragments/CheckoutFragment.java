@@ -32,7 +32,7 @@ public class CheckoutFragment extends Fragment {
     FirebaseAuth auth;
     Button checkout;
     int startHour,startMinutes;
-    String name;
+    String name,department;
     String timeHours,timeMinutes;
     CharSequence currentMonth,currentYear;
     @Nullable
@@ -144,7 +144,8 @@ public class CheckoutFragment extends Fragment {
                     if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                            name=dataSnapshot.child("name").getValue(String.class);
+                            name=snapshot.child("name").getValue(String.class);
+                            department=snapshot.child("department").getValue(String.class);
 
 
 
@@ -161,10 +162,10 @@ public class CheckoutFragment extends Fragment {
                             currentMonth= DateFormat.format("MMM",calendar);
                             currentYear= DateFormat.format("yyyy",calendar);
 
-                            ReportModel  reportModel=new ReportModel(name,"se","emp",String.valueOf(currentMonth),totalHours,totalMinutes);
+                            ReportModel  reportModel=new ReportModel(name,department,"emp",String.valueOf(currentMonth),String.valueOf(totalHours),String.valueOf(totalMinutes));
                               DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Reports");
                                    reference.child(String.valueOf(currentMonth+" "+currentYear)).child(id).setValue(reportModel);
-                            reference.child(String.valueOf(currentMonth+" "+currentYear)).child("month").setValue(currentMonth);
+                           // reference.child(String.valueOf(currentMonth+" "+currentYear)).child("month").setValue(currentMonth);
                          // getToalTime(currentMonth,currentYear,id);
 
                             }
@@ -197,7 +198,7 @@ public class CheckoutFragment extends Fragment {
                           totalHours+=Integer.parseInt(timeHours);
                           totalMinutes+=Integer.parseInt(timeMinutes);
                           timeMinutes+=totalMinutes;
-                            ReportModel  reportModel=new ReportModel(name,"se","emp",String.valueOf(month),totalHours,totalMinutes);
+                            ReportModel  reportModel=new ReportModel(name,"se","emp",String.valueOf(month),String.valueOf(totalHours),String.valueOf(totalMinutes));
                             DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Reports");
                             reference.child(String.valueOf(month+" "+year)).child(getID).setValue(reportModel);
                             reference.child(String.valueOf(month+" "+year)).child("month").setValue(month);

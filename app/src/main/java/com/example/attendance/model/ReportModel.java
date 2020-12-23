@@ -2,12 +2,12 @@ package com.example.attendance.model;
 
 public class ReportModel {
     String name,department,type,month;
-    int totalHours,totalMintues;
+    String totalHours,totalMintues;
 
     public ReportModel() {
     }
 
-    public ReportModel(String name, String department, String type, String month, int totalHours, int totalMintues) {
+    public ReportModel(String name, String department, String type, String month, String totalHours, String totalMintues) {
         this.name = name;
         this.department = department;
         this.type = type;
@@ -16,11 +16,11 @@ public class ReportModel {
         this.totalMintues = totalMintues;
     }
 
-    public int getTotalMintues() {
+    public String getTotalMintues() {
         return totalMintues;
     }
 
-    public void setTotalMintues(int totalMintues) {
+    public void setTotalMintues(String totalMintues) {
         this.totalMintues = totalMintues;
     }
 
@@ -32,11 +32,11 @@ public class ReportModel {
         this.month = month;
     }
 
-    public int getTotalHours() {
+    public String getTotalHours() {
         return totalHours;
     }
 
-    public void setTotalHours(int totalHours) {
+    public void setTotalHours(String totalHours) {
         this.totalHours = totalHours;
     }
 
@@ -48,13 +48,7 @@ public class ReportModel {
         this.name = name;
     }
 
-    public int getTime() {
-        return totalHours;
-    }
 
-    public void setTime(int time) {
-        this.totalHours = totalHours;
-    }
 
     public String getDepartment() {
         return department;

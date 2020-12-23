@@ -146,7 +146,7 @@ public class CheckinFragment extends Fragment {
         FirebaseUser firebaseUser=auth.getCurrentUser();
         final String id=firebaseUser.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users");
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -1,6 +1,7 @@
 package com.example.attendance.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendance.R;
+import com.example.attendance.activities.AdminMain;
+import com.example.attendance.activities.LoginAndRegisterActivity;
 import com.example.attendance.data.SignUpRequestsData;
 import com.example.attendance.model.UserData;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,11 +36,14 @@ import java.util.List;
 public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAdapter.SignUpRequestsViewHolder> {
     List<SignUpRequestsData> signUpRequestsDataList;
     Context context;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference,reference;
     UserData userData;
+    FirebaseAuth auth;
+    FirebaseDatabase database;
 
     public SignUpRequestsAdapter(List<SignUpRequestsData> signUpRequestsDataList,Context context) {
         this.context=context;
+        auth=FirebaseAuth.getInstance();
         this.signUpRequestsDataList=signUpRequestsDataList;
     }
 
@@ -74,12 +85,11 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
                                  userData= snapshot.getValue(UserData.class);
 
                                 databaseReference=FirebaseDatabase.getInstance().getReference();
-                                UserData userData2=new UserData(userData.getName(),userData.getEmail(),userData.getPassword(),userData.getImage(),userData.getType(),userData.getDepartment(),userData.getPhone());
-                                databaseReference.child("Users").push().setValue(userData2).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                    }
-                                });
+                              // UserData userData2=new UserData(userData.getName(),userData.getEmail(),userData.getPassword(),userData.getImage(),userData.getType(),userData.getDepartment(),userData.getPhone());
+                                    register(userData.getName(),userData.getPassword(),userData.getEmail(),userData.getPhone(),"Employee",userData.getDepartment()
+                                    ,userData.getImage());
+
+
                                 FirebaseDatabase.getInstance().getReference("Register Request").orderByChild("email").equalTo(signUpRequestsDataList.get(position).getEmail()).addListenerForSingleValueEvent(
                                         new ValueEventListener() {
                                             @Override
@@ -134,6 +144,34 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
 
 
     }
+    private void register(final String textName, final String textPassword, final String textEmail, final String textPhone,
+                          final String type, final String textDepartment, final String image) {
+        auth.createUserWithEmailAndPassword(textEmail,textPassword).
+                addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            userData=new UserData(textName,textEmail,textPassword,image,type,textDepartment,textPhone);
+                            FirebaseUser firebaseUser=auth.getCurrentUser();
+                            String id=firebaseUser.getUid();
+                            database=FirebaseDatabase.getInstance();
+                            reference=database.getReference("Users").child(id);
+                            reference.setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                }
+                            });
+                        }else {
+                            Toast.makeText(context, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
+
+    }
+
 
     @Override
     public int getItemCount() {

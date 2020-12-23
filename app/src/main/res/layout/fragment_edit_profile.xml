@@ -52,6 +52,7 @@
         android:layout_below="@id/fragment_edit_phone"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
+        android:visibility="gone"
         android:id="@+id/fragment_spinner_depart"
         ></Spinner>
     <Button
@@ -61,6 +62,7 @@
         android:layout_below="@id/fragment_spinner_depart"
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
+        android:layout_marginTop="20dp"
         android:id="@+id/fragment_btn_edit_picture"
         ></Button>
 
