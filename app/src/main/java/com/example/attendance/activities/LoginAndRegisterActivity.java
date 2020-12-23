@@ -222,7 +222,7 @@ TextView textRegister,text,textLogin;
                       .setContentTitle("Register notification")
                         .setContentText(message)
                           .setAutoCancel(true);
-                    Intent intent =new Intent(LoginAndRegisterActivity.this,MainActivity.class);
+                    Intent intent =new Intent(LoginAndRegisterActivity.this,AdminMain.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("name","mohamed");
                     PendingIntent pendingIntent=PendingIntent.getActivity(LoginAndRegisterActivity.this,
@@ -272,7 +272,7 @@ TextView textRegister,text,textLogin;
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Intent intent=new Intent(LoginAndRegisterActivity.this, MainActivity.class);
+                    Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
                     startActivity(intent);
                     finish();
                 }else {
@@ -323,9 +323,9 @@ TextView textRegister,text,textLogin;
         reference.setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-               /*` Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
+                Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
                 startActivity(intent);
-                finish();*/
+                finish();
             }
         });
     }

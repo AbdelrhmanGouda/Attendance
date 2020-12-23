@@ -2,6 +2,25 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Welcome to our system"
+        android:layout_marginTop="100dp"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:id="@+id/checkint_text"
+        ></TextView>
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkint_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:textSize="20sp"
+        android:id="@+id/chronometer_start"
+        ></Chronometer>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

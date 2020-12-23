@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Boolean currentState =false;
     FirebaseAuth auth;
     FirebaseUser firebaseUser;
-    String name;
+    String name,hay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         firebaseUser=auth.getCurrentUser();
         name=getIntent().getStringExtra("name");
+        hay=getIntent().getStringExtra("hoursWork");
 
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
+
 
        if(savedInstanceState==null){
            if(name!=null){
