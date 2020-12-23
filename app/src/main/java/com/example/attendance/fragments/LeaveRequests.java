@@ -17,11 +17,12 @@ import com.example.attendance.data.LeaveRequestsData;
 import com.example.attendance.data.SignUpRequestsData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class LeaveRequests extends Fragment {
     RecyclerView leaveRecyclerView;
-    ArrayList<LeaveRequestsData> leaveRequestsData;
+    List<LeaveRequestsData> leaveRequestsDataList;
     LeaveRequestsAdapter leaveRequestsAdapter;
 
     @Override
@@ -32,11 +33,8 @@ public class LeaveRequests extends Fragment {
         leaveRecyclerView =view.findViewById(R.id.leave_requests_recycler);
         LinearLayoutManager linerLayoutManager = new LinearLayoutManager(getContext());
         leaveRecyclerView.setLayoutManager(linerLayoutManager);
-        leaveRequestsData= new ArrayList<LeaveRequestsData>();
-        leaveRequestsData.add(new LeaveRequestsData("Abdelrhman Gouda","SE","8:01","Because Ana 3L2"));
-        leaveRequestsData.add(new LeaveRequestsData("Khaled Nabil","IS","1:30","adddddddddddddddddddddddddddddddddddddddddddddddddddddd"));
-        leaveRequestsData.add(new LeaveRequestsData("Mohamed Nasr","SE","10:20","sdkfjhfdsghdxnzbdksguhasdfgdsjkxvvdzxvndjbdsbvbdajkkdjalsbvjlkdsdvjsklasbdk;bdva;bjkdkdsvldbjkvvdsbajbkdsbjvdsa;bavcx nvjdhvcnk"));
-        leaveRequestsAdapter= new LeaveRequestsAdapter(leaveRequestsData,getContext());
+        leaveRequestsDataList= new ArrayList<>();
+        leaveRequestsAdapter= new LeaveRequestsAdapter(leaveRequestsDataList,getContext());
         leaveRecyclerView.setAdapter(leaveRequestsAdapter);
         return view;
     }

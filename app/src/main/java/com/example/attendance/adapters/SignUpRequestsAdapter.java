@@ -14,15 +14,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendance.R;
 import com.example.attendance.data.SignUpRequestsData;
+import com.example.attendance.model.UserData;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAdapter.SignUpRequestsViewHolder> {
-    ArrayList<SignUpRequestsData> signUpRequestsData;
+    List<SignUpRequestsData> signUpRequestsDataList;
     Context context;
-    public SignUpRequestsAdapter(ArrayList<SignUpRequestsData> signUpRequestsData,Context context) {
+    DatabaseReference databaseReference;
+    UserData userData;
+
+    public SignUpRequestsAdapter(List<SignUpRequestsData> signUpRequestsDataList,Context context) {
         this.context=context;
-        this.signUpRequestsData=signUpRequestsData;
+        this.signUpRequestsDataList=signUpRequestsDataList;
     }
 
     @NonNull
@@ -34,16 +45,16 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
 
     @Override
     public void onBindViewHolder(@NonNull SignUpRequestsViewHolder holder, final int position) {
-        holder.empName.setText(signUpRequestsData.get(position).getEmpName());
-        holder.empEmail.setText(signUpRequestsData.get(position).getEmpEmail());
-        holder.empDept.setText(signUpRequestsData.get(position).getEmpDept());
-        final boolean isExpended = signUpRequestsData.get(position).isExpended();
+        holder.empName.setText(signUpRequestsDataList.get(position).getName());
+        holder.empEmail.setText(signUpRequestsDataList.get(position).getEmail());
+        holder.empDept.setText(signUpRequestsDataList.get(position).getDepartment());
+        final boolean isExpended = signUpRequestsDataList.get(position).isExpended();
         holder.expandableLayout.setVisibility(isExpended ? View.VISIBLE : View.GONE);
 
         holder.expandableLayoutClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signUpRequestsData.get(position).setExpended(!isExpended);
+                signUpRequestsDataList.get(position).setExpended(!isExpended);
                 notifyDataSetChanged();
 
             }
@@ -52,21 +63,81 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
         holder.requestAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                databaseReference =FirebaseDatabase.getInstance().getReference("Register Request");
+                Query query = FirebaseDatabase.getInstance().getReference("Register Request").orderByChild("name").equalTo(signUpRequestsDataList.get(position).getName());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                 userData= snapshot.getValue(UserData.class);
+
+                                databaseReference=FirebaseDatabase.getInstance().getReference();
+                                UserData userData2=new UserData(userData.getName(),userData.getEmail(),userData.getPassword(),userData.getImage(),userData.getType(),userData.getDepartment(),userData.getPhone());
+                                databaseReference.child("Users").push().setValue(userData2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                    }
+                                });
+                                FirebaseDatabase.getInstance().getReference("Register Request").orderByChild("email").equalTo(signUpRequestsDataList.get(position).getEmail()).addListenerForSingleValueEvent(
+                                        new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                                    child.getRef().setValue(null);
+                                                }
+                                            }
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        });
+                                signUpRequestsDataList.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeRemoved(position, getItemCount());
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 Toast.makeText(context, "accepted", Toast.LENGTH_SHORT).show();
+
             }
         });
         holder.requestDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "declined", Toast.LENGTH_SHORT).show();
+                FirebaseDatabase.getInstance().getReference("Register Request").orderByChild("email").equalTo(signUpRequestsDataList.get(position).getEmail()).addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                        child.getRef().setValue(null);
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                        });
+                signUpRequestsDataList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeRemoved(position, getItemCount());
             }
         });
+
 
     }
 
     @Override
     public int getItemCount() {
-        return signUpRequestsData.size();
+        return signUpRequestsDataList.size();
     }
 
     public class SignUpRequestsViewHolder extends RecyclerView.ViewHolder {

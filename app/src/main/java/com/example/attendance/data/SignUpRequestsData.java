@@ -1,38 +1,41 @@
 package com.example.attendance.data;
 
 public class SignUpRequestsData {
-    private String  empName,empEmail,empDept;
+    private String name, email, department;
     private boolean isExpended;
 
-    public SignUpRequestsData(String empName, String empEmail, String empDept) {
-        this.empName = empName;
-        this.empEmail = empEmail;
-        this.empDept = empDept;
+    public SignUpRequestsData() {
+    }
+
+    public SignUpRequestsData(String name, String email, String department) {
+        this.name = name;
+        this.email = email;
+        this.department = department;
         this.isExpended =false;
     }
 
-    public String getEmpName() {
-        return empName;
+    public String getName() {
+        return name;
     }
 
-    public void setEmpName(String empName) {
-        this.empName = empName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getEmpEmail() {
-        return empEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmpEmail(String empEmail) {
-        this.empEmail = empEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getEmpDept() {
-        return empDept;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setEmpDept(String empDept) {
-        this.empDept = empDept;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public boolean isExpended() {

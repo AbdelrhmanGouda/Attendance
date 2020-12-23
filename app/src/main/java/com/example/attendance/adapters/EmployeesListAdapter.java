@@ -13,17 +13,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendance.R;
-import com.example.attendance.data.AvailableEmployeeData;
 import com.example.attendance.data.EmployeesListData;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdapter.EmployeesListAdapterViewHolder> {
-    ArrayList<EmployeesListData> employeesListData;
+    List<EmployeesListData> employeesListDataList;
     Context context;
+    DatabaseReference databaseReference;
 
-    public EmployeesListAdapter(ArrayList<EmployeesListData> employeesListData, Context context) {
-        this.employeesListData = employeesListData;
+
+    public EmployeesListAdapter(List<EmployeesListData> employeesListDataList, Context context) {
+        this.employeesListDataList = employeesListDataList;
         this.context = context;
     }
 
@@ -36,7 +43,7 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
 
     @Override
     public void onBindViewHolder(@NonNull EmployeesListAdapterViewHolder holder, final int position) {
-        holder.employeeName.setText(employeesListData.get(position).getEmployeeName());
+        holder.employeeName.setText(employeesListDataList.get(position).getName());
         holder.deleteEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,7 +52,20 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                employeesListData.remove(position);
+                                FirebaseDatabase.getInstance().getReference("Users").orderByChild("name").equalTo(employeesListDataList.get(position).getName()).addListenerForSingleValueEvent(
+                                        new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                                    child.getRef().setValue(null);
+                                                }
+                                            }
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        });
+
+                                employeesListDataList.remove(position);
                                 notifyItemRemoved(position);
                                 notifyItemRangeRemoved(position, getItemCount());
                             }
@@ -62,7 +82,7 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
 
     @Override
     public int getItemCount() {
-        return employeesListData.size();
+        return employeesListDataList.size();
     }
 
     public class EmployeesListAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -75,5 +95,7 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
             deleteEmployee = itemView.findViewById(R.id.emp_list_del_btn);
 
         }
+    }
+    private void delete(){
     }
 }

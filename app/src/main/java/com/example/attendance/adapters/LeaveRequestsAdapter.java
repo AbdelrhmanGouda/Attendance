@@ -17,13 +17,14 @@ import com.example.attendance.data.LeaveRequestsData;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LeaveRequestsAdapter extends RecyclerView.Adapter<LeaveRequestsAdapter.LeaveRequestsViewHolder> {
-    ArrayList<LeaveRequestsData> leaveRequestsData;
+    List<LeaveRequestsData> leaveRequestsDataList;
     Context context;
-    public LeaveRequestsAdapter( ArrayList<LeaveRequestsData> leaveRequestsData,Context context) {
+    public LeaveRequestsAdapter( List<LeaveRequestsData> leaveRequestsDataList,Context context) {
         this.context=context;
-        this.leaveRequestsData=leaveRequestsData;
+        this.leaveRequestsDataList=leaveRequestsDataList;
     }
     @NonNull
     @Override
@@ -34,17 +35,17 @@ public class LeaveRequestsAdapter extends RecyclerView.Adapter<LeaveRequestsAdap
 
     @Override
     public void onBindViewHolder(@NonNull LeaveRequestsViewHolder holder, final int position) {
-        holder.empName.setText(leaveRequestsData.get(position).getLeaveEmpName());
-        holder.empDept.setText(leaveRequestsData.get(position).getLeaveEmpDept());
-        holder.leaveTime.setText(leaveRequestsData.get(position).getLeaveEmpTime());
-        holder.empReason.setText(leaveRequestsData.get(position).getLeaveEmpReason());
-        final boolean isExpanded = leaveRequestsData.get(position).isExpended();
+        holder.empName.setText(leaveRequestsDataList.get(position).getLeaveEmpName());
+        holder.empDept.setText(leaveRequestsDataList.get(position).getLeaveEmpDept());
+        holder.leaveTime.setText(leaveRequestsDataList.get(position).getLeaveEmpTime());
+        holder.empReason.setText(leaveRequestsDataList.get(position).getLeaveEmpReason());
+        final boolean isExpanded = leaveRequestsDataList.get(position).isExpended();
         holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
         holder.expandableLayoutClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaveRequestsData.get(position).setExpended(!isExpanded);
+                leaveRequestsDataList.get(position).setExpended(!isExpanded);
                 notifyDataSetChanged();
 
             }
@@ -67,7 +68,7 @@ public class LeaveRequestsAdapter extends RecyclerView.Adapter<LeaveRequestsAdap
 
     @Override
     public int getItemCount() {
-        return leaveRequestsData.size();
+        return leaveRequestsDataList.size();
     }
 
     public class LeaveRequestsViewHolder extends RecyclerView.ViewHolder {

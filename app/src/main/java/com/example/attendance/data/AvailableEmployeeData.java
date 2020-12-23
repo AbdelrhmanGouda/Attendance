@@ -1,17 +1,20 @@
 package com.example.attendance.data;
 
 public class AvailableEmployeeData {
-    private String availableEmployeeName;
-
-    public String getAvailableEmployeeName() {
-        return availableEmployeeName;
+    public AvailableEmployeeData() {
     }
 
-    public void setAvailableEmployeeName(String availableEmployeeName) {
-        this.availableEmployeeName = availableEmployeeName;
+    private String Name;
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        this.Name = name;
     }
 
     public AvailableEmployeeData(String availableEmployeeName) {
-        this.availableEmployeeName = availableEmployeeName;
+        this.Name = availableEmployeeName;
     }
 }

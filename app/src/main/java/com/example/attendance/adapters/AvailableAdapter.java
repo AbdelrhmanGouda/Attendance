@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.attendance.R;
 import com.example.attendance.data.AvailableEmployeeData;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class AvailableAdapter extends RecyclerView.Adapter<AvailableAdapter.ViewHolder> {
-    ArrayList<AvailableEmployeeData> availableEmployeeDataArrayList;
+    private List<AvailableEmployeeData> availableEmployeeDataList;
     Context context;
-    public AvailableAdapter(ArrayList<AvailableEmployeeData> availableEmployeeData ,Context context){
-    this.availableEmployeeDataArrayList =availableEmployeeData;
+    public AvailableAdapter(List<AvailableEmployeeData> availableEmployeeDataList ,Context context){
+    this.availableEmployeeDataList =availableEmployeeDataList;
     this.context =context;
     }
     @NonNull
@@ -30,12 +30,12 @@ public class AvailableAdapter extends RecyclerView.Adapter<AvailableAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.availableEmployeeName.setText(availableEmployeeDataArrayList.get(position).getAvailableEmployeeName());
+        holder.availableEmployeeName.setText("Name :  "+availableEmployeeDataList.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return availableEmployeeDataArrayList.size();
+        return availableEmployeeDataList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

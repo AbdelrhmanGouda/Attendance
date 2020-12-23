@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,17 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendance.R;
 import com.example.attendance.data.EmployeesReportsData;
-import com.example.attendance.data.LeaveRequestsData;
-import com.example.attendance.fragments.EmployeesReports;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeesReportsAdapter extends RecyclerView.Adapter<EmployeesReportsAdapter.EmployeesReportsViewHolder>  {
-    ArrayList<EmployeesReportsData> employeesReportsData;
+    List<EmployeesReportsData> employeesReportsDataList;
     Context context;
-    public EmployeesReportsAdapter( ArrayList<EmployeesReportsData> employeesReportsData,Context context) {
+    public EmployeesReportsAdapter( List<EmployeesReportsData> employeesReportsDataList,Context context) {
         this.context=context;
-        this.employeesReportsData=employeesReportsData;
+        this.employeesReportsDataList=employeesReportsDataList;
     }
     @NonNull
     @Override
@@ -34,16 +31,16 @@ public class EmployeesReportsAdapter extends RecyclerView.Adapter<EmployeesRepor
 
     @Override
     public void onBindViewHolder(@NonNull EmployeesReportsViewHolder holder, final int position) {
-        holder.reportEmpName.setText(employeesReportsData.get(position).getReportEmpName());
-        holder.reportEmpDept.setText(employeesReportsData.get(position).getReportEmpDept());
-        holder.reportEmpMonth.setText(employeesReportsData.get(position).getReportEmpMonth());
-        holder.reportEmpAbsence.setText(employeesReportsData.get(position).getReportEmpAbsence());
-        final boolean isExpended = employeesReportsData.get(position).isExpended();
+        holder.reportEmpName.setText(employeesReportsDataList.get(position).getName());
+        holder.reportEmpDept.setText(employeesReportsDataList.get(position).getDepartment());
+        holder.reportEmpMonth.setText(employeesReportsDataList.get(position).getMonth());
+        holder.reportEmpAbsence.setText(employeesReportsDataList.get(position).getTotalHours() + " : "+employeesReportsDataList.get(position).getTotalMintues());
+        final boolean isExpended = employeesReportsDataList.get(position).isExpended();
         holder.expandableLayout.setVisibility(isExpended ? View.VISIBLE : View.GONE);
         holder.expandableLayoutClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                employeesReportsData.get(position).setExpended(!isExpended);
+                employeesReportsDataList.get(position).setExpended(!isExpended);
                 notifyDataSetChanged();
             }
         });
@@ -51,7 +48,7 @@ public class EmployeesReportsAdapter extends RecyclerView.Adapter<EmployeesRepor
 
     @Override
     public int getItemCount() {
-        return employeesReportsData.size();
+        return employeesReportsDataList.size();
     }
 
     public class EmployeesReportsViewHolder extends RecyclerView.ViewHolder {
