@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.logout :
-             //   disconnect();
+              disconnect();
                 Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

@@ -170,9 +170,15 @@ TextView textRegister,text,textLogin;
 
 
                 if(TextUtils.isEmpty(textName)||TextUtils.isEmpty(textPassword)||TextUtils.isEmpty(textEmail)
-                        ||TextUtils.isEmpty(textPhone)||TextUtils.isEmpty(textType)){
+                        ||TextUtils.isEmpty(textPhone)){
                     Toast.makeText(LoginAndRegisterActivity.this, "Enter all fields", Toast.LENGTH_SHORT).show();
-                }else {
+                }else if(textPassword.length()<6){
+                    Toast.makeText(LoginAndRegisterActivity.this, "Password must be equal or more than six ", Toast.LENGTH_SHORT).show();
+                }else if(uri1==null){
+                    Toast.makeText(LoginAndRegisterActivity.this, "Please, choose your profile image ", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
 
                   signupNotification(textName);
                    registerRequest(textName,textPassword,textEmail,textPhone,textType,textType,textDepartment,image);
@@ -456,13 +462,19 @@ TextView textRegister,text,textLogin;
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                         finish();
-                                    }else {
+                                    }else if(data.equals("Head")){
 
                                         Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         intent.putExtra("type","Head");
                                         startActivity(intent);
                                         finish();
+                                    }else {
+                                        Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+
                                     }
 
                                 }
