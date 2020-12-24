@@ -112,18 +112,7 @@ TextView textRegister,text,textLogin;
             keepLogin(id);
         }
 
-        employee.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    department.setVisibility(View.VISIBLE);
 
-                }else {
-                    department.setVisibility(View.GONE);
-
-                }
-            }
-        });
         getDepartments();
 
                 department.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -306,7 +295,7 @@ TextView textRegister,text,textLogin;
         FirebaseUser user=auth.getCurrentUser();
         final String n=user.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(n);
+        Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(id);
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -325,7 +314,7 @@ TextView textRegister,text,textLogin;
 
                         if(data.equals("Employee")){
 
-                            Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
+                            Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
@@ -416,12 +405,10 @@ TextView textRegister,text,textLogin;
 
         name.setVisibility(View.VISIBLE);
         phone.setVisibility(View.VISIBLE);
-
+        department.setVisibility(View.VISIBLE);
         btnImage.setVisibility(View.VISIBLE);
         signup.setVisibility(View.VISIBLE);
         textLogin.setVisibility(View.VISIBLE);
-        admin.setVisibility(View.VISIBLE);
-        employee.setVisibility(View.VISIBLE);
 
     }
     private void login(final String email, String password) {

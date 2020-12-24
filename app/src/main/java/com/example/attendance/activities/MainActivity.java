@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseAuth auth;
     String name,hay,userName,userDepartment,userImage;
     View view;
-    String id;
+    String id,uId;
     CircleImageView imgHead;
     TextView textName,textDepartment;
     @Override
@@ -85,9 +86,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void getHeader() {
         FirebaseUser firebaseUser=auth.getCurrentUser();
-        final String id=firebaseUser.getUid();
+        if(firebaseUser!=null){
+            uId=firebaseUser.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
+        }
+
+        Query query6 = FirebaseDatabase.getInstance().getReference().child("Users").child(uId);
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -142,11 +146,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.logout :
              //   disconnect();
-                auth.signOut();
-                Intent intent = new Intent(MainActivity.this, LoginAndRegisterActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                Log.i("Login",auth.getUid());
+                auth.signOut();
                 finish();
+
+
+                Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.leave_request :
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RequestLeaveFragment()).commit();
@@ -169,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void disconnect() {
 
-        FirebaseUser firebaseUser=auth.getCurrentUser();
+       // FirebaseUser firebaseUser=auth.getCurrentUser();
         if(firebaseUser!=null){
            id=firebaseUser.getUid();
 

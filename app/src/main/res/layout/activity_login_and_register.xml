@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/radio_group"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="30dp"
         android:id="@+id/spinner_depart"
         android:visibility="gone"
