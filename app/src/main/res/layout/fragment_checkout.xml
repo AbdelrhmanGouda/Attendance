@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:background="#BA22"
+
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dont forget checkout the system after finishing your work"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        ></TextView>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Leave"
+        android:layout_centerInParent="true"
         android:id="@+id/btn_checkout"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         ></Button>
 
