@@ -39,10 +39,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Boolean currentState =false;
-    FirebaseAuth auth;
     FirebaseUser firebaseUser;
+    FirebaseAuth auth;
     String name,hay,userName,userDepartment,userImage;
     View view;
+    String id;
     CircleImageView imgHead;
     TextView textName,textDepartment;
     @Override
@@ -52,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout=findViewById(R.id.drawer_layout);
         toolbar=findViewById(R.id.toolbar);
         navigationView=findViewById(R.id.nav_view);
-        auth=FirebaseAuth.getInstance();
-
+    auth=FirebaseAuth.getInstance();
         firebaseUser=auth.getCurrentUser();
         name=getIntent().getStringExtra("name");
         hay=getIntent().getStringExtra("hoursWork");
@@ -141,9 +141,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.logout :
-                disconnect();
+             //   disconnect();
                 auth.signOut();
-                Intent intent=new Intent(MainActivity.this, LoginAndRegisterActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginAndRegisterActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
                 break;
@@ -167,8 +168,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
  */
 
     private void disconnect() {
+
         FirebaseUser firebaseUser=auth.getCurrentUser();
-        String id=firebaseUser.getUid();
+        if(firebaseUser!=null){
+           id=firebaseUser.getUid();
+
+        }
         Query query6 = FirebaseDatabase.getInstance().getReference().child("Employee Available").child(id);
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

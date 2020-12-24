@@ -1,7 +1,11 @@
 package com.example.attendance.adapters;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendance.R;
@@ -40,6 +45,8 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
     UserData userData;
     FirebaseAuth auth;
     FirebaseDatabase database;
+    String CHANNAL_ID = "channal";
+
 
     public SignUpRequestsAdapter(List<SignUpRequestsData> signUpRequestsDataList,Context context) {
         this.context=context;
@@ -88,6 +95,8 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
                               // UserData userData2=new UserData(userData.getName(),userData.getEmail(),userData.getPassword(),userData.getImage(),userData.getType(),userData.getDepartment(),userData.getPhone());
                                     register(userData.getName(),userData.getPassword(),userData.getEmail(),userData.getPhone(),"Employee",userData.getDepartment()
                                     ,userData.getImage());
+                                signupNotification(userData.getName());
+
 
 
                                 FirebaseDatabase.getInstance().getReference("Register Request").orderByChild("email").equalTo(signUpRequestsDataList.get(position).getEmail()).addListenerForSingleValueEvent(
@@ -124,6 +133,7 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "declined", Toast.LENGTH_SHORT).show();
+                signupNotificationReject();
                 FirebaseDatabase.getInstance().getReference("Register Request").orderByChild("email").equalTo(signUpRequestsDataList.get(position).getEmail()).addListenerForSingleValueEvent(
                         new ValueEventListener() {
                                 @Override
@@ -171,6 +181,85 @@ public class SignUpRequestsAdapter extends RecyclerView.Adapter<SignUpRequestsAd
 
 
     }
+    private void signupNotification(String textName) {
+
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ){
+
+            String name = "mychannal";
+            String description = "this is decsreption";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+
+            NotificationChannel channel =new NotificationChannel(CHANNAL_ID ,name,importance);
+            channel.setDescription(description);
+
+            NotificationManager manager = context.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        String message = "hello "+textName+" ,welcome to our system";
+        NotificationCompat.Builder builder=new NotificationCompat.Builder(
+                context,CHANNAL_ID
+        )
+                .setSmallIcon(R.drawable.notification_background)
+                .setContentTitle("Register notification")
+                .setContentText(message)
+                .setAutoCancel(true);
+        Intent intent =new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("name","mohamed");
+        PendingIntent pendingIntent=PendingIntent.getActivity(context,
+                0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager=(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0,builder.build());
+        Toast.makeText(context, "Notification sent", Toast.LENGTH_SHORT).show();
+
+        //if(type==(admin || head) to see this noti only)
+
+
+    }
+    private void signupNotificationReject() {
+
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ){
+
+            String name = "mychannal";
+            String description = "this is decsreption";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+
+            NotificationChannel channel =new NotificationChannel(CHANNAL_ID ,name,importance);
+            channel.setDescription(description);
+
+            NotificationManager manager = context.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        String message = "sorry , your request is rejected";
+        NotificationCompat.Builder builder=new NotificationCompat.Builder(
+                context,CHANNAL_ID
+        )
+                .setSmallIcon(R.drawable.notification_background)
+                .setContentTitle("Register notification")
+                .setContentText(message)
+                .setAutoCancel(true);
+        Intent intent =new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("name","mohamed");
+        PendingIntent pendingIntent=PendingIntent.getActivity(context,
+                0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager=(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0,builder.build());
+        Toast.makeText(context, "Notification sent", Toast.LENGTH_SHORT).show();
+
+        //if(type==(admin || head) to see this noti only)
+
+
+    }
+
 
 
     @Override

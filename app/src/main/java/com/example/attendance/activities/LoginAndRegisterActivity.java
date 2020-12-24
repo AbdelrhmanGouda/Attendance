@@ -109,7 +109,7 @@ TextView textRegister,text,textLogin;
         firebaseUser=auth.getCurrentUser();
         if(firebaseUser!=null){
             id=firebaseUser.getUid();
-          //  keepLogin(id);
+            keepLogin(id);
         }
 
         employee.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -160,7 +160,6 @@ TextView textRegister,text,textLogin;
                     Toast.makeText(LoginAndRegisterActivity.this, "Enter all fields", Toast.LENGTH_SHORT).show();
                 }else {
                     login(textEmail, textPassword);
-                   // keepLogin(id);
                 }
 
             }
@@ -303,29 +302,30 @@ TextView textRegister,text,textLogin;
     }
 
     private void keepLogin( String id) {
-        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
-        final String uId=firebaseUser.getUid();
+        FirebaseAuth  firebaseAuth=FirebaseAuth.getInstance();
+        FirebaseUser user=auth.getCurrentUser();
+        final String n=user.getUid();
 
-        Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(uId);
+        Query query6 = FirebaseDatabase.getInstance().getReference("Users").child(n);
         query6.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot!=null){
+
                     if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0&&dataSnapshot.getValue().toString().length()>0) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             userData=new UserData();
-                          //  userData=snapshot.getValue(UserData.class);
+                            //  userData=snapshot.getValue(UserData.class);
                             data=dataSnapshot.child("type").getValue(String.class);
 
                         }
                         Log.i("Employee",data);
-                        Log.i("Employee1",uId);
+                        Log.i("Employee1",n);
 
                         if(data.equals("Employee")){
 
-                            Intent intent=new Intent(LoginAndRegisterActivity.this,MainActivity.class);
+                            Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
@@ -377,7 +377,7 @@ TextView textRegister,text,textLogin;
                       .setContentTitle("Register notification")
                         .setContentText(message)
                           .setAutoCancel(true);
-                    Intent intent =new Intent(LoginAndRegisterActivity.this,AdminMain.class);
+                    Intent intent =new Intent();
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("name","mohamed");
                     PendingIntent pendingIntent=PendingIntent.getActivity(LoginAndRegisterActivity.this,
@@ -385,6 +385,7 @@ TextView textRegister,text,textLogin;
                     builder.setContentIntent(pendingIntent);
                     NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(0,builder.build());
+        Toast.makeText(LoginAndRegisterActivity.this, "Notification sent", Toast.LENGTH_SHORT).show();
 
                     //if(type==(admin || head) to see this noti only)
 
