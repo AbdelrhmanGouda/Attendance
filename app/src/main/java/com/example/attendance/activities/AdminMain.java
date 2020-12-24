@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdminMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    String name,hay,userName,userDepartment,userImage;
+    String name,hay,userName,userDepartment,userImage,type;
     CircleImageView imgHead;
     View view;
     TextView textName,textDepartment;
@@ -52,11 +53,11 @@ public class AdminMain extends AppCompatActivity implements NavigationView.OnNav
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
         auth= FirebaseAuth.getInstance();
-
+        type=getIntent().getStringExtra("type");
         toolbar=findViewById(R.id.admin_toolbar);
         setSupportActionBar(toolbar);
 
-
+            hideItem();
             getHeader();
         drawerLayout =findViewById(R.id.admin_drawer_layout);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
@@ -90,12 +91,15 @@ public class AdminMain extends AppCompatActivity implements NavigationView.OnNav
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.view_available :
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.admin_fragment_container,new ViewAvailable()).commit();
                 break;
             case R.id.assign_roles :
+                //admin
                 getSupportFragmentManager().beginTransaction().replace(R.id.admin_fragment_container,new AssignRoles()).commit();
                 break;
             case R.id.signup_requests :
+                //admin
                 getSupportFragmentManager().beginTransaction().replace(R.id.admin_fragment_container,new SignUpRequests()).commit();
                 break;
             case R.id.admin_leave_requests :
@@ -107,7 +111,12 @@ public class AdminMain extends AppCompatActivity implements NavigationView.OnNav
             case R.id.employees_reports :
                 getSupportFragmentManager().beginTransaction().replace(R.id.admin_fragment_container,new EmployeesReports()).commit();
                 break;
+            case R.id.edit_admin_profile :
+                getSupportFragmentManager().beginTransaction().replace(R.id.admin_fragment_container,new EditProfileFragment()).commit();
+                break;
+
             case R.id.manage_department :
+                //admin
                 getSupportFragmentManager().beginTransaction().replace(R.id.admin_fragment_container,new ManageDepartment()).commit();
                 break;
             case R.id.admin_logout :
@@ -152,6 +161,21 @@ public class AdminMain extends AppCompatActivity implements NavigationView.OnNav
             }
         });
 
+
+    }
+    private void hideItem()
+    {   if(type!=null){
+        if(type.equals("Head")){
+         NavigationView   navigationView=findViewById(R.id.admin_navigation);
+
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.assign_roles).setVisible(false);
+            nav_Menu.findItem(R.id.signup_requests).setVisible(false);
+            nav_Menu.findItem(R.id.manage_department).setVisible(false);
+
+        }
+
+    }
 
     }
 

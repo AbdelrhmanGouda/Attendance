@@ -386,9 +386,14 @@ TextView textRegister,text,textLogin;
         text.setVisibility(View.VISIBLE);
         textRegister.setVisibility(View.VISIBLE);
         login.setVisibility(View.VISIBLE);
+        email.setText("");
+        password.setText("");
 
         name.setVisibility(View.GONE);
+        name.setText("");
         phone.setVisibility(View.GONE);
+        phone.setText("");
+
         department.setVisibility(View.GONE);
         signup.setVisibility(View.GONE);
         btnImage.setVisibility(View.GONE);
@@ -402,9 +407,13 @@ TextView textRegister,text,textLogin;
        text.setVisibility(View.GONE);
         textRegister.setVisibility(View.GONE);
         login.setVisibility(View.GONE);
+        email.setText("");
+        password.setText("");
 
         name.setVisibility(View.VISIBLE);
+        name.setText("");
         phone.setVisibility(View.VISIBLE);
+        name.setText("");
         department.setVisibility(View.VISIBLE);
         btnImage.setVisibility(View.VISIBLE);
         signup.setVisibility(View.VISIBLE);
@@ -451,6 +460,7 @@ TextView textRegister,text,textLogin;
 
                                         Intent intent=new Intent(LoginAndRegisterActivity.this,AdminMain.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.putExtra("type","Head");
                                         startActivity(intent);
                                         finish();
                                     }
@@ -520,6 +530,11 @@ TextView textRegister,text,textLogin;
                /* Intent intent=new Intent(LoginAndRegisterActivity.this, AdminMain.class);
                 startActivity(intent);
                 finish();*/
+                name.setText("");
+                password.setText("");
+                email.setText("");
+                phone.setText("");
+
             }
         });
     }

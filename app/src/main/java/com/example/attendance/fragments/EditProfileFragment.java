@@ -76,6 +76,10 @@ public class EditProfileFragment extends Fragment {
                         Toast.makeText(getActivity(), "Enter all fields", Toast.LENGTH_SHORT).show();
                     }else {
                         updateProfile(name.getText().toString(),email.getText().toString(),password.getText().toString(),phone.getText().toString(),uri1.toString());
+                        name.setText("");
+                        password.setText("");
+                        email.setText("");
+                        phone.setText("");
 
                     }
 
@@ -163,6 +167,7 @@ public class EditProfileFragment extends Fragment {
                             String getDepartment=dataSnapshot.child("department").getValue(String.class);
                             userData=new UserData(name,email,password,image,getType,getDepartment,phone);
                             reference.setValue(userData);
+
 
                         }
 

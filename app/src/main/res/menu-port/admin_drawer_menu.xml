@@ -18,8 +18,12 @@
             android:title="Employees Reports"/>
         <item android:id="@+id/manage_department"
             android:title="Manage Department"/>
+        <item android:id="@+id/edit_admin_profile"
+            android:title="Edit profile"
+            ></item>
         <item android:id="@+id/admin_logout"
             android:title="Logout"/>
+
 
     </group>
 </menu>
